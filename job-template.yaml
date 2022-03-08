@@ -14,7 +14,7 @@ parameters:
 - name: RSYNC_IMAGE
   displayName: Rsync Image Name 
   description: Name of Image to use for running rsync process
-  value: docker-registry.default.svc:5000/openshift/rsync
+  value: image-registry.openshift-image-registry.svc:5000/$NAMESPACE/rsync@$CHECKSUM
   required: true
 objects:
 - apiVersion: batch/v1
@@ -28,6 +28,9 @@ objects:
       metadata:
         name: rsync
       spec:
+        serviceAccountName: ibm-mas-visualinspection-operator
+        securityContext:
+          runAsUser: 0
         containers:
         - name: rsync
           image: ${RSYNC_IMAGE}
